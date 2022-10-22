@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/dansa-sociais/api/rsc/router/rotas"
+	"github.com/dansa-sociais/api/internal/router/rotas"
 	"github.com/gorilla/mux"
 )
 

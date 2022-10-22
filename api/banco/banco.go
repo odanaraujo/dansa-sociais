@@ -3,7 +3,7 @@ package banco
 import (
 	"database/sql"
 
-	"github.com/dansa-sociais/api/rsc/config"
+	"github.com/dansa-sociais/api/config"
 	_ "github.com/go-sql-driver/mysql" //Driver
 )
 

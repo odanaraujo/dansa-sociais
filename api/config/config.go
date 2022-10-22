@@ -17,10 +17,10 @@ var (
 //iniciar as variáveis de ambiente
 func Carregar() {
 
-	fmt.Println("Chegou aqui")
 	var erro error
 
 	if erro = godotenv.Load(); erro != nil {
+		fmt.Println("caiu aqui")
 		log.Fatal(erro)
 	}
 

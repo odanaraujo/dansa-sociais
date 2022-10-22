@@ -3,7 +3,7 @@ package rotas
 import (
 	"net/http"
 
-	"github.com/dansa-sociais/api/rsc/controllers"
+	"github.com/dansa-sociais/api/internal/controllers"
 )
 
 var rotasUsuarios = []Rota{
@@ -15,7 +15,7 @@ var rotasUsuarios = []Rota{
 	},
 
 	{
-		URI:                "/usuarios/",
+		URI:                "/usuarios",
 		Metodo:             http.MethodGet,
 		Funcao:             controllers.BuscarTodosUsuarios,
 		RequerAutenticacao: false,
