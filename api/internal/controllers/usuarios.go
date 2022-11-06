@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -146,7 +145,6 @@ func AtualizarUsuario(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if erro = usuario.Preparar("edicao"); erro != nil {
-		fmt.Println("caiu aqui 149")
 		response.Erro(w, http.StatusBadRequest, erro)
 		return
 	}
@@ -170,5 +168,25 @@ func AtualizarUsuario(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeletarUsuario(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Deletando usuário"))
+	parametro := mux.Vars(r)
+
+	usuarioId, erro := strconv.ParseUint(parametro["usuarioId"], 10, 64)
+
+	if erro != nil {
+		response.Erro(w, http.StatusBadRequest, erro)
+	}
+
+	db, erro := banco.Conectar()
+
+	if erro != nil {
+		response.Erro(w, http.StatusInternalServerError, erro)
+	}
+
+	defer db.Close()
+
+	repositorio := repo.NovoRepositorioDeUsuario(db)
+
+	repositorio.DeletarUsuario(usuarioId)
+
+	response.JSON(w, http.StatusNoContent, nil)
 }
