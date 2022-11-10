@@ -2,11 +2,11 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 
 	"github.com/dansa-sociais/api/banco"
+	"github.com/dansa-sociais/api/internal/autenticacao"
 	"github.com/dansa-sociais/api/internal/entity"
 	"github.com/dansa-sociais/api/internal/response"
 	"github.com/dansa-sociais/api/internal/seguranca"
@@ -46,13 +46,16 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(usuario.Senha, usuarioSalvoNoBanco.Senha, usuarioSalvoNoBanco.ID)
-
 	if erro := seguranca.VerificarSenha(usuarioSalvoNoBanco.Senha, usuario.Senha); erro != nil {
 		response.Erro(w, http.StatusUnauthorized, erro)
 		return
 	}
 
-	w.Write([]byte("Você está logado! PARABÉNS!!!"))
+	token, erro := autenticacao.CriarToken(usuarioSalvoNoBanco.ID)
 
+	if erro != nil {
+		response.Erro(w, http.StatusInternalServerError, erro)
+	}
+
+	w.Write([]byte(token))
 }
