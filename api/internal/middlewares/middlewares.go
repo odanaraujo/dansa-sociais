@@ -1,21 +1,26 @@
 package middlewares
 
 import (
-	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/dansa-sociais/api/internal/autenticacao"
+	"github.com/dansa-sociais/api/internal/response"
 )
 
-func Logger(next http.HandlerFunc) http.HandlerFunc {
+func Logger(proximaFuncao http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("\n %s %s %s", r.Method, r.RequestURI, r.Host)
-		next(w, r)
+		proximaFuncao(w, r)
 	}
 }
 
-func Autenticar(next http.HandlerFunc) http.HandlerFunc {
+func Autenticar(proximaFuncao http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Autenticar")
-		next(w, r)
+		if erro := autenticacao.ValidarToken(r); erro != nil {
+			response.Erro(w, http.StatusUnauthorized, erro)
+			return
+		}
+		proximaFuncao(w, r)
 	}
 }
